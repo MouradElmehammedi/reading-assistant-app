@@ -36,7 +36,8 @@ export default function ReadingArea() {
   useEffect(() => {
     setSynth(window.speechSynthesis);
     const loadVoices = () => {
-      const availableVoices = synth.getVoices();
+      let availableVoices: any[] = [];
+      if(synth) availableVoices = synth.getVoices();
       setVoices(availableVoices);
       
       // Set default voice for the selected language
