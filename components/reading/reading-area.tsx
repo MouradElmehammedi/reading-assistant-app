@@ -30,10 +30,11 @@ export default function ReadingArea() {
   const [selectedVoice, setSelectedVoice] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [prevContent, setPrevContent] = useState("");
-  const synth = window.speechSynthesis;
+  const [synth, setSynth] = useState<SpeechSynthesis | null>(null);
   let utterance: SpeechSynthesisUtterance | null = null;
 
   useEffect(() => {
+    setSynth(window.speechSynthesis);
     const loadVoices = () => {
       const availableVoices = synth.getVoices();
       setVoices(availableVoices);
@@ -45,9 +46,11 @@ export default function ReadingArea() {
       }
     };
 
-    loadVoices();
-    if (synth.onvoiceschanged !== undefined) {
-      synth.onvoiceschanged = loadVoices;
+    if (synth) {
+      loadVoices();
+      if (synth.onvoiceschanged !== undefined) {
+        synth.onvoiceschanged = loadVoices;
+      }
     }
   }, [synth, selectedLang]);
  
